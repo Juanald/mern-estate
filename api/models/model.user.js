@@ -4,17 +4,17 @@ import mongoose, { isObjectIdOrHexString } from "mongoose";
 const userSchema = new mongoose.Schema(
   {
     username: {
-      typeof: String,
+      type: String,
       required: true,
       unique: true,
     },
     email: {
-      typeof: String,
+      type: String,
       required: true,
       unique: true,
     },
     password: {
-      typeof: String,
+      type: String,
       required: true,
     },
   },
