@@ -10,15 +10,6 @@ import Signin from "./pages/Signin.tsx";
 import Header from "./components/Header.tsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 
-// const router = createBrowserRouter([
-//   { path: "/", element: <Home />, errorElement: <ErrorPage /> },
-//   { path: "/signin", element: <Signin />, errorElement: <ErrorPage /> },
-//   { path: "/about", element: <About />, errorElement: <ErrorPage /> },
-//   { path: "/signup", element: <SignUp />, errorElement: <ErrorPage /> },
-//   { path: "/profile", element: <Profile />, errorElement: <ErrorPage /> },
-//   { path: "*", element: <ErrorPage /> },
-// ]);
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -29,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/profile" element={<Profile />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
