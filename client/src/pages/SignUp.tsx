@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hooks.tsx";
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../redux/user/userslice.tsx";
+import { RootState } from "@reduxjs/toolkit/query";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [errors, setErrors] = useState(null);
+  // const [loading, setLoading] = useState(false);
+  const { loading, errors } = useAppSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -13,7 +22,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(signInStart());
     try {
       // Make a request to the signup endpoint
       const response = await fetch(`/api/auth/signup`, {
@@ -27,17 +36,15 @@ export default function SignUp() {
 
       // If we run into errors, populate errors for user display
       if (!response.ok) {
-        setErrors(data.message);
-        setLoading(false);
+        dispatch(signInFailure(data.message));
         return;
       }
 
       // Otherwise, if successful, reset errors and navigate to home page
-      setLoading(false);
-      setErrors(null);
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error: any) {
-      setErrors(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
 

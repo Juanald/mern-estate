@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userslice";
 
 export default function Signin() {
   const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, errors } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -13,7 +19,7 @@ export default function Signin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(signInStart());
     try {
       // Make a request to the signup endpoint
       const response = await fetch(`/api/auth/signin`, {
@@ -27,18 +33,15 @@ export default function Signin() {
 
       // If we run into errors, populate errors for user display
       if (!response.ok) {
-        setErrors(data.message);
-        setLoading(false);
+        dispatch(signInFailure(data.message));
         return;
       }
 
       // Otherwise, if successful, reset errors and navigate to home page
-      setLoading(false);
-      setErrors(null);
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error: any) {
-      setLoading(false);
-      setErrors(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
 
