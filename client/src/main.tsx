@@ -12,6 +12,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import { persistor, store } from "./redux/store.tsx";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -22,7 +23,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+            </Route>
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="*" element={<ErrorPage />} />
