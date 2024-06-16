@@ -7,6 +7,7 @@ import {
   signInSuccess,
 } from "../redux/user/userslice.tsx";
 import { RootState } from "@reduxjs/toolkit/query";
+import OAuth from "../components/OAuth.tsx";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -76,6 +77,7 @@ export default function SignUp() {
         <button className="bg-slate-700 rounded-lg text-white p-3 uppercase hover:opacity-95 disabled:opacity-80">
           {loading ? "Loading..." : "Sign up"}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-4">
         <p>Already have an account?</p>

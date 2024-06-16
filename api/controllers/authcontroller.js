@@ -34,3 +34,39 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const googleSignIn = async (req, res, next) => {
+  try {
+    const { username, email, photo } = req.body;
+
+    // We should check if there already exists a user in the database with this username, if so, log them in.
+    const user = await User.findOne({ email: email });
+
+    // If such a user exists, grant them a jwt, register it as a cookie
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const { password, ...rest } = user._doc;
+      res.cookie("access-cookie", token).status(200).json(rest);
+    } else {
+      // Create a new user password
+      const generatedPass =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPass = bcrypt.hashSync(generatedPass, 10);
+      const newUser = new User({
+        username:
+          username.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-8),
+        email,
+        password: hashedPass,
+        photoAvatar: photo,
+      });
+      await newUser.save();
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+      const { password, ...rest } = newUser._doc;
+      res.cookie("access-cookie", token).status(201).json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
