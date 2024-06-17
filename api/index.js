@@ -5,7 +5,7 @@ import userRouter from "./routes/routes.user.js";
 import authRouter from "../api/routes/auth.route.js";
 dotenv.config(); // In order to allow for environment variables to be used.
 
-mongoose
+export const db = mongoose
   .connect(process.env.MONGO)
   .then(() => {
     console.log("Connected to MongoDB!");
